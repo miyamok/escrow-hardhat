@@ -1,5 +1,63 @@
 # Decentralized Escrow Application
 
+This is a deliverable for the 5th week assignment, decentralized escrow application, of the Ethereum development bootcamp, Alchemy University (alchemy.com/university).
+An escrow is a service to arbitrate a trade, eg. sending an item to the buyer to the seller, by the third entity, which has a power to secure the buyer's payment until the agreement, eg. the item delivery, has indeed been fulfilled.
+The seller may receive the payment only after it has been approved by the arbiter.
+This project offers the following features to implement the escraw service through blockchain technology.
+
+- Web app frontend
+  - A depositor can deploy escrow smart contract, designating the beneficiary and the arbiter, sending the payment to the contract.
+  - The arbiter can approve the paynent.
+  - The beneficiary receives money from the contract after the approval.
+- API server backend
+  - Keeps the deployed escrow contracts
+ 
+The following challenges, suggested by the alchemy university, are fulfilled.
+
+- Challenge 1: Run the dApp on a Live Testnet
+  - It runs on Sepolia testnet.
+- Challenge 2: Stylize
+  - Customized by means of bootstrap.
+- Challenge 3: Wei to Ether Conversion
+  - ETH used instead of wei.
+- Challenge 4: Persistence
+  - The backend does the job.
+- Challenge 5: What else?
+  - TODO: time stamps for deposit and approval will be implemented.
+ 
+There are some limitations for this moment.
+The lifetime of the data persistency is only for the period the backend program is kept running.  Once the backend is shut down, the data is gone.
+The frontend is fixed to work at localhost:3000, and the backend is localhost:8000 .
+
+In order to start-up the frontend app,
+```
+% cd app
+% npm start
+```
+
+To start-up the backend server,
+```
+% cd api
+% python3 api.py
+```
+It requires python3 (>= 3.6.8), flask, and flask_cors installed.
+
+## Frontend
+
+The frontend is developed through ethers.js and react, and its source code is found in https://github.com/miyamok/escrow-hardhat/tree/main/app .
+
+## Smart contract
+
+The escrow smart contract is developed using Solidity, and the code is [https://github.com/miyamok/escrow-hardhat/blob/main/contracts/Escrow.sol](https://github.com/miyamok/escrow-hardhat/blob/main/contracts/Escrow.sol) .
+
+## Backend
+
+The backend is developed through python/flask, and the code is https://github.com/miyamok/escrow-hardhat/blob/main/api/app.py .
+
+The rest of this document is just to keep the original README by alchemy.com .
+
+# Decentralized Escrow Application
+
 This is an Escrow Dapp built with [Hardhat](https://hardhat.org/).
 
 ## Project Layout
