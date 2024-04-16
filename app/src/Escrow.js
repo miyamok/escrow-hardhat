@@ -7,7 +7,6 @@ export default function Escrow({
   beneficiary,
   value,
   approved,
-//  handleApprove,
 }) {
   return (
     <div className="existing-contract">
@@ -35,7 +34,6 @@ export default function Escrow({
           onClick={(e) => {
             e.preventDefault();
 
-            // handleApprove();
             approveByEscrowContractAddress(contract);
             
           }}
