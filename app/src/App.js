@@ -5,34 +5,40 @@ import Escrow from './Escrow';
 import { approveByEscrowContractAddress } from './approve';
 
 export const provider = new ethers.providers.Web3Provider(window.ethereum);
+export const api_server = "http://localhost:8000";
 
 // export async function approve(escrowContract, signer) {
 //   const approveTxn = await escrowContract.connect(signer).approve();
 //   await approveTxn.wait();
 // }
 
-const deployedEscrows = localStorage.getItem("deployedEscrows");
+// const deployedEscrows = localStorage.getItem("deployedEscrows");
 
-function getDeployedEscrows() {
-  if (deployedEscrows) {
-    const p = JSON.parse(deployedEscrows);
-    if (p.length === 0) {
-      return [];
-    } else {
-      return p;
-    }
-  } else {
-    return [];
-  }
+// function getDeployedEscrows() {
+//   if (deployedEscrows) {
+//     const p = JSON.parse(deployedEscrows);
+//     if (p.length === 0) {
+//       return [];
+//     } else {
+//       return p;
+//     }
+//   } else {
+//     return [];
+//   }
+// }
+function serialize(obj) {
+  var str = [];
+  for(var p in obj)
+     str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+  return str.join("&");
 }
-
-export function useEscrowList() {
-  const [escrows, setEscrows] = useState(() => getDeployedEscrows());
-  useEffect(() => {
-    localStorage.setItem("deployedEscrows", JSON.stringify(escrows));
-  }, [escrows]);
-  return [escrows, setEscrows];
-}
+// export function useEscrowList() {
+//   const [escrows, setEscrows] = useState(() => getDeployedEscrows());
+//   useEffect(() => {
+//     localStorage.setItem("deployedEscrows", JSON.stringify(escrows));
+//   }, [escrows]);
+//   return [escrows, setEscrows];
+// }
 
 // export function setApprovedFlag(adr) {
 //   const [escrows, setEscrows] = useEscrowList();
@@ -43,8 +49,9 @@ export function useEscrowList() {
 //   escrow);
 // }
 
+
 function App() {
-  const [escrows, setEscrows] = useState(() => getDeployedEscrows());
+  const [escrows, setEscrows] = useState([]);
   //const [escrows, setEscrows] = useState([]);
   const [account, setAccount] = useState();
   const [signer, setSigner] = useState();
@@ -63,20 +70,28 @@ function App() {
   }, [account]);
 
   useEffect(() => {
-    localStorage.setItem("deployedEscrows", JSON.stringify(escrows));
-  }, [escrows])
+    async function getEscrows() {
+    // localStorage.setItem("deployedEscrows", JSON.stringify(escrows));
+    const url = api_server + '/list';
+    const dat = await fetch(url).then((res) => res.json());
+    setEscrows(dat);
+    }
+    getEscrows();
+  }, [])
 
   async function newContract() {
     const beneficiary = document.getElementById('beneficiary').value;
     const arbiter = document.getElementById('arbiter').value;
     const value = ethers.utils.parseEther(document.getElementById('amount').value);
     const escrowContract = await deploy(signer, arbiter, beneficiary, value);
+    console.log(escrowContract);
 
     const escrow = {
-      address: escrowContract.address,
+      contract: escrowContract.address,
       arbiter,
       beneficiary,
       value: value.toString(),
+      depositor: signer.getAddress(),
       approved: false,
       // handleApprove: async () => {
       //   escrowContract.on('Approved', () => {
@@ -91,6 +106,10 @@ function App() {
     };
 
     setEscrows([...escrows, escrow]);
+
+    const params = serialize(escrow);
+    const url = api_server + '/deploy?' + params;
+    fetch(url).then((response) => console.log(response.json()));
   }
 
   return (
@@ -115,7 +134,6 @@ function App() {
             <input className="form-control input-lg" type="text" id="amount" />
           </label>
         </div>
-
         <div
           className="button"
           id="deploy"
@@ -132,9 +150,8 @@ function App() {
         <span className="fs-1">Existing Contracts</span>
 
         <div id="container">
-
           {escrows.length === 0 ? <span className="fs-5">No deployed contracts found</span> : escrows.map((escrow) => {
-            return <Escrow key={escrow.address} setter={setEscrows} escrows={escrows} {...escrow} />;
+            return <Escrow key={escrow.contract} setter={setEscrows} escrows={escrows} {...escrow} />;
           })}
         </div>
       </div>

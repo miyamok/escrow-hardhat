@@ -1,7 +1,7 @@
 import { ethers } from 'ethers';
 import Escrow from './artifacts/contracts/Escrow.sol/Escrow';
 import { setApprovedFlag } from './App';
-import { useEscrowList, provider } from './App';
+import { useEscrowList, provider, api_server } from './App';
 
 async function approve(escrowContract, signer) {
     // const gasLimitEstimate = await provider.estimateGas({
@@ -12,7 +12,11 @@ async function approve(escrowContract, signer) {
     // });
     // console.log(gasLimitEstimate);
     const approveTxn = await escrowContract.connect(signer).approve({gasLimit: 50000});
-    await approveTxn.wait();
+    await approveTxn.wait().then(async (receipt) => {
+        if (receipt && receipt.status === 1) {
+            fetch(api_server + '/approve/' + escrowContract.address);
+        }});
+
 }
 
 export async function approveByEscrowContractAddress(a) {

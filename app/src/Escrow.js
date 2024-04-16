@@ -2,7 +2,7 @@ import {ethers} from 'ethers';
 import {approveByEscrowContractAddress} from './approve';
 
 export default function Escrow({
-  address,
+  contract,
   arbiter,
   beneficiary,
   value,
@@ -26,17 +26,17 @@ export default function Escrow({
         </li>
         <li>
         <div> Escrow contract </div>
-          <div>{address}</div>
+          <div>{contract}</div>
         </li>
         { approved ? <div className="complete">✓ It's been approved!</div> :
         <div
           className="button"
-          id={address}
+          id={contract}
           onClick={(e) => {
             e.preventDefault();
 
             // handleApprove();
-            approveByEscrowContractAddress(address);
+            approveByEscrowContractAddress(contract);
             
           }}
         >

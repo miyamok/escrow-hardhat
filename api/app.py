@@ -1,14 +1,16 @@
 from flask import Flask, json, request
+from flask_cors import CORS
 
 escrows = {}
 api = Flask(__name__)
+CORS(api)
 
 @api.route('/list', methods=['GET'])
 def get_deployed_escrows():
   print ("existing escrows:")
   print (escrows)
 
-  return json.dumps(escrows)
+  return json.dumps(list(escrows.values()))
 
 @api.route('/deploy', methods=['GET'])
 def deploy_escrow():
@@ -18,14 +20,13 @@ def deploy_escrow():
     print (args)
   else:
     contract = args['contract']
-    del args['contract']
     args['approved'] = False
     escrows[contract] = args
 
     print("contract " + contract + " added.")
     print(args)
   
-  return json.dumps(escrows)
+  return json.dumps(list(escrows.values()))
 
 def verify_deployment(d):
   ks = d.keys()
@@ -57,7 +58,7 @@ def approve_escrow(contract):
   else:
     print ("contract " + contract + " not found on the database.")
 
-  return json.dumps(escrows)
+  return json.dumps(list(escrows.values()))
 
 if __name__ == '__main__':
-    api.run()
+    api.run(port=8000)
