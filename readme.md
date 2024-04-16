@@ -23,7 +23,7 @@ The following challenges, suggested by the alchemy university, are fulfilled.
 - Challenge 4: Persistence
   - The backend does the job.
 - Challenge 5: What else?
-  - TODO: time stamps for deposit and approval will be implemented.
+  - Contract emits another event for deployment.
  
 There are some limitations for this moment.
 The lifetime of the data persistency is only for the period the backend program is kept running.  Once the backend is shut down, the data is gone.
