@@ -27,7 +27,10 @@ The following challenges, suggested by the alchemy university, are fulfilled.
  
 There are some limitations for this moment.
 The lifetime of the data persistency is only for the period the backend program is kept running.  Once the backend is shut down, the data is gone.
-The frontend is fixed to work at localhost:3000, and the backend is localhost:8000 .
+The backend works at localhost:8000 by default, and in order to change it, you need to modify the following source code.
+
+- <code>api_server = "http://localhost:8000"</code> in <code>app/App.js</code>.
+- <code>api.run(port=8000)</code> in <code>api/app.py</code>.
 
 In order to start-up the frontend app,
 ```
