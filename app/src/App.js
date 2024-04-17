@@ -42,6 +42,7 @@ function App() {
     const beneficiary = document.getElementById('beneficiary').value;
     const arbiter = document.getElementById('arbiter').value;
     const value = ethers.utils.parseEther(document.getElementById('amount').value);
+    const depositor = await signer.getAddress();
     const escrowContract = await deploy(signer, arbiter, beneficiary, value);
 
     const escrow = {
@@ -49,7 +50,7 @@ function App() {
       arbiter,
       beneficiary,
       value: value.toString(),
-      depositor: signer.getAddress(),
+      depositor: depositor,
       approved: false,
     };
 
@@ -57,7 +58,7 @@ function App() {
 
     const params = serialize(escrow);
     const url = api_server + '/deploy?' + params;
-    fetch(url).then((response) => console.log(response.json()));
+    fetch(url);
   }
 
   return (
