@@ -56,6 +56,22 @@ The escrow smart contract is developed using Solidity, and the code is [https://
 ## Backend
 
 The backend is developed through python/flask, and the code is https://github.com/miyamok/escrow-hardhat/blob/main/api/app.py .
+The following REST APIs are implemented.
+
+### <code>/deploy?contract=&lt;address&gt;&depositor=&lt;address&gt;&arbiter=&lt;address&gt;&beneficiary=&lt;address&gt;&value=&lt;uint&gt;</code>
+
+It creates a new data entry of an escrow contract.
+Required parameters are the addresses of the contract, the depositor, the arbiter, and the beneficiary, and also the value deposited.
+
+### <code>/list</code>
+
+It gives the list of deployed escrow contracts.
+Each entry has the boolean approval status in addition to the data given as the parameters to call the <code>deploy</code> method.
+
+### <code>/approve?contract=&lt;address&gt;</code>
+
+The approval status of the escrow contract goes true.
+The address of the escrow contract is required as a parameter.
 
 The rest of this document is just to keep the original README by alchemy.com .
 
